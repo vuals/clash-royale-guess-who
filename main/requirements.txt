@@ -1,0 +1,6 @@
+# Requirements for Clash Royale Guess Who
+# Install with: pip install -r requirements.txt
+
+Pillow>=9.0.0          # For image handling and background processing
+ttkbootstrap>=1.10.0   # Modern tkinter themes (matches your existing game)
+requests>=2.25.0       # For downloading card images (if using download script)
