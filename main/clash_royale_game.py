@@ -34,16 +34,16 @@ class Card:
 
 # Your existing card data
 CARDS: List[Card] = [
-    Card("Knight", "common", "troop", 3, True, False, "ground", "defense", "images/knight.png"),
-    Card("Archers", "common", "troop", 3, False, False, "both", "support", "images/archers.png"),
-    Card("Giant", "rare", "troop", 5, False, False, "ground", "win_condition", "images/giant.png"),
-    Card("Baby Dragon", "rare", "troop", 4, False, True, "air", "support", "images/baby-dragon.png"),
-    Card("Hog Rider", "rare", "troop", 4, True, False, "ground", "win_condition", "images/hog-rider.png"),
-    Card("Wizard", "rare", "troop", 5, False, False, "both", "support", "images/wizard.png"),
-    Card("Inferno Tower", "rare", "building", 5, False, False, "ground", "defense", "images/inferno-tower.png"),
-    Card("Balloon", "epic", "troop", 5, False, True, "air", "win_condition", "images/balloon.png"),
-    Card("Electro Wizard", "legendary", "troop", 4, False, False, "both", "support", "images/electro-wizard.png"),
-    Card("Skeletons", "common", "troop", 1, False, False, "ground", "swarm", "images/skeletons.png"),
+    Card("Knight", "common", "troop", 3, True, False, "ground", "defense", "card images/knight.png"),
+    Card("Archers", "common", "troop", 3, False, False, "both", "support", "card images/archers.png"),
+    Card("Giant", "rare", "troop", 5, False, False, "ground", "win_condition", "card images/giant.png"),
+    Card("Baby Dragon", "rare", "troop", 4, False, True, "air", "support", "card images/baby-dragon.png"),
+    Card("Hog Rider", "rare", "troop", 4, True, False, "ground", "win_condition", "card images/hog-rider.png"),
+    Card("Wizard", "rare", "troop", 5, False, False, "both", "support", "card images/wizard.png"),
+    Card("Inferno Tower", "rare", "building", 5, False, False, "ground", "defense", "card images/inferno-tower.png"),
+    Card("Balloon", "epic", "troop", 5, False, True, "air", "win_condition", "card images/balloon.png"),
+    Card("Electro Wizard", "legendary", "troop", 4, False, False, "both", "support", "card images/electro-wizard.png"),
+    Card("Skeletons", "common", "troop", 1, False, False, "ground", "swarm", "card images/skeletons.png"),
 ]
 
 ATTRIBUTES: Dict[str, Callable[[Card], Any]] = {

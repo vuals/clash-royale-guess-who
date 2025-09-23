@@ -26,14 +26,14 @@ class ClashRoyaleMainMenu:
             'bg_primary': '#1e293b',
             'bg_card': '#1e293b',
             'border_blue': '#60a5fa',
-            'text_gold': '#fbbf24',
+            'text_gold': "#dda823",
             'text_white': '#ffffff',
             'text_light_blue': '#dbeafe',
-            'button_orange': '#ea580c',
-            'button_orange_hover': '#c2410c',
-            'button_cyan': '#0891b2',
-            'button_yellow': '#eab308',
-            'button_gray': '#6b7280'
+            'button_orange': "#fd5e08",
+            'button_orange_hover': "#b84112",
+            'button_cyan': "#0aa1c7",
+            'button_yellow': "#ddab14",
+            'button_gray': "#6d727c"
         }
         
         # Load and setup background
