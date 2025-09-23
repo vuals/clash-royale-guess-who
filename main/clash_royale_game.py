@@ -44,6 +44,7 @@ CARDS: List[Card] = [
     Card("Balloon", "epic", "troop", 5, False, True, "air", "win_condition", "card images/balloon.png"),
     Card("Electro Wizard", "legendary", "troop", 4, False, False, "both", "support", "card images/electro-wizard.png"),
     Card("Skeletons", "common", "troop", 1, False, False, "ground", "swarm", "card images/skeletons.png"),
+    Card("Prince", "epic", "troop", 5, True, False, "ground", "win_condition","card images/prince.png"),
 ]
 
 ATTRIBUTES: Dict[str, Callable[[Card], Any]] = {
