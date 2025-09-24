@@ -34,18 +34,26 @@ class Card:
 
 # Your existing card data
 CARDS: List[Card] = [
-    Card("Knight", "common", "troop", 3, True, False, "ground", "defense", "card images/knight.png"),
-    Card("Archers", "common", "troop", 3, False, False, "both", "support", "card images/archers.png"),
-    Card("Giant", "rare", "troop", 5, False, False, "ground", "win_condition", "card images/giant.png"),
-    Card("Baby Dragon", "rare", "troop", 4, False, True, "air", "support", "card images/baby-dragon.png"),
-    Card("Hog Rider", "rare", "troop", 4, True, False, "ground", "win_condition", "card images/hog-rider.png"),
-    Card("Wizard", "rare", "troop", 5, False, False, "both", "support", "card images/wizard.png"),
-    Card("Inferno Tower", "rare", "building", 5, False, False, "ground", "defense", "card images/inferno-tower.png"),
-    Card("Balloon", "epic", "troop", 5, False, True, "air", "win_condition", "card images/balloon.png"),
-    Card("Electro Wizard", "legendary", "troop", 4, False, False, "both", "support", "card images/electro-wizard.png"),
-    Card("Skeletons", "common", "troop", 1, False, False, "ground", "swarm", "card images/skeletons.png"),
-    Card("Prince", "epic", "troop", 5, True, False, "ground", "win_condition","card images/prince.png"),
-    Card("Miner", "legendary", "troop", 3, False, False, "ground", "support","card images/miner(clash royale).jpg"),
+    Card("Knight", "common", "troop", 3, True, False, "ground", "defense", "card images/clash-knight.webp"),
+    Card("Archers", "common", "troop", 3, False, False, "both", "support", "card images/clash-archers.webp"),
+    Card("Giant", "rare", "troop", 5, False, False, "ground", "win_condition", "card images/clash-giant.webp"),
+    Card("Baby Dragon", "rare", "troop", 4, False, True, "air", "support", "card images/clash-baby-dragon.webp"),
+    Card("Hog Rider", "rare", "troop", 4, True, False, "ground", "win_condition", "card images/clash-hog-rider.webp"),
+    Card("Wizard", "rare", "troop", 5, False, False, "both", "support", "card images/clash-wizard.webp"),
+    Card("Inferno Tower", "rare", "building", 5, False, False, "ground", "defense", "card images/clash-inferno-tower.webp"),
+    Card("Balloon", "epic", "troop", 5, False, True, "air", "win_condition", "card images/clash-balloon.webp"),
+    Card("Electro Wizard", "legendary", "troop", 4, False, False, "both", "support", "card images/clash-electro-wizard.webp"),
+    Card("Skeletons", "common", "troop", 1, False, False, "ground", "swarm", "card images/clash-skeletons.webp"),
+    Card("Prince", "epic", "troop", 5, True, False, "ground", "win_condition","card images/clash-prince.webp"),
+    Card("Miner", "legendary", "troop", 3, False, False, "ground", "support","card images/clash-royale-miner.webp"),
+    Card("princess", "legendary", "troop", 3, False, True, "both", "support","card images/clash-princess.webp"),
+    Card("Goblin Barrel", "epic", "spell", 3, False, False, "ground", "win_condition","card images/clash-goblin-barrel.webp"),
+    Card("Fireball", "rare", "spell", 4, False, False, "ground", "support","card images/clash-fireball.webp"),
+    Card("mortar", "common", "building", 4, False, False, "ground", "defense","card images/clash-mortar.webp"),
+    Card("musketeer", "rare", "troop", 4, False, False, "both", "support","card images/clash-musketeer.webp"),
+    Card("goblin gang", "common", "troop", 3, False, False, "ground", "swarm","card images/clash-goblin-gang.webp"),
+    Card("minion horde", "common", "troop", 5, False, True, "air", "swarm","card images/clash-minion-horde.webp"),
+    Card("lava hound", "legendary", "troop", 7, False, True, "air", "win_condition","card images/clash-lava-hound.webp"),
 ]
 
 ATTRIBUTES: Dict[str, Callable[[Card], Any]] = {

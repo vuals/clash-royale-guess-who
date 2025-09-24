@@ -1,282 +1,227 @@
 import tkinter as tk
-from tkinter import ttk, font, messagebox
-from PIL import Image, ImageTk, ImageFilter
+from tkinter import font, messagebox
+from PIL import Image, ImageTk
 import os
-import ttkbootstrap as tb
+
 
 class ClashRoyaleMainMenu:
-    def __init__(self, root, on_play=None, on_how_to_play=None, on_leaderboard=None, on_settings=None):
+    def __init__(self, root, bg_image_path="extra images/clash royale scene.png",
+                 on_play=None, on_how_to_play=None, on_leaderboard=None, on_settings=None):
         self.root = root
+        self.bg_image_path = bg_image_path
+
         self.on_play = on_play or self.default_play
         self.on_how_to_play = on_how_to_play or self.default_how_to_play
         self.on_leaderboard = on_leaderboard or self.default_leaderboard
         self.on_settings = on_settings or self.default_settings
-        
-        # Configure root window
+
+        # Configure window
         self.root.title("Clash Royale Guess Who")
-        self.root.geometry("800x600")
-        self.root.configure(bg='#1e293b')
+        self.root.geometry("1400x900")
+        self.root.configure(bg="#0a0e27")
         self.root.resizable(True, True)
-        
-        # Initialize ttkbootstrap style
-        self.style = tb.Style(theme="flatly")
-        
-        # Color scheme matching the React version
-        self.colors = {
-            'bg_primary': '#1e293b',
-            'bg_card': '#1e293b',
-            'border_blue': '#60a5fa',
-            'text_gold': "#dda823",
-            'text_white': '#ffffff',
-            'text_light_blue': '#dbeafe',
-            'button_orange': "#fd5e08",
-            'button_orange_hover': "#b84112",
-            'button_cyan': "#0aa1c7",
-            'button_yellow': "#ddab14",
-            'button_gray': "#6d727c"
-        }
-        
-        # Load and setup background
-        self.setup_background()
-        
-        # Create main frame
-        self.main_frame = tk.Frame(root, bg=self.colors['bg_primary'])
-        self.main_frame.pack(fill='both', expand=True)
-        
-        # Setup fonts
-        self.setup_fonts()
-        
-        # Create UI elements
-        self.create_ui()
-        
-        # Center the window
-        self.center_window()
-    
-    def setup_fonts(self):
-        """Setup custom fonts for the UI"""
-        self.title_font = font.Font(family="Arial", size=32, weight="bold")
-        self.subtitle_font = font.Font(family="Arial", size=18, weight="bold")
-        self.button_font = font.Font(family="Arial", size=14, weight="bold")
-        self.desc_font = font.Font(family="Arial", size=12)
-    
-    def setup_background(self):
-        """Setup background image if available"""
-        try:
-            # Try to load background image (you'll need to provide this)
-            bg_path = "assets/clash_royale_background.png"
-            if os.path.exists(bg_path):
-                self.bg_image = Image.open(bg_path)
-                self.bg_image = self.bg_image.resize((800, 600), Image.Resampling.LANCZOS)
-                # Add overlay effect
-                overlay = Image.new('RGBA', self.bg_image.size, (30, 41, 59, 180))
-                self.bg_image = Image.alpha_composite(self.bg_image.convert('RGBA'), overlay)
-                self.bg_photo = ImageTk.PhotoImage(self.bg_image)
-            else:
-                self.bg_photo = None
-        except Exception as e:
-            print(f"Could not load background image: {e}")
-            self.bg_photo = None
-    
-    def create_ui(self):
-        """Create the main UI elements"""
-        # Background label if image is available
-        if self.bg_photo:
-            bg_label = tk.Label(self.main_frame, image=self.bg_photo, bg=self.colors['bg_primary'])
-            bg_label.place(x=0, y=0, relwidth=1, relheight=1)
-        
-        # Main container frame
-        container = tk.Frame(self.main_frame, bg=self.colors['bg_primary'])
-        container.pack(expand=True, fill='both')
-        
-        # Title section
-        title_frame = tk.Frame(container, bg=self.colors['bg_primary'])
-        title_frame.pack(pady=(50, 30))
-        
-        # Crown symbols (using text symbols)
-        crown_left = tk.Label(title_frame, text="♛", fg=self.colors['text_gold'], 
-                             bg=self.colors['bg_primary'], font=("Arial", 24))
-        crown_left.pack(side='left', padx=10)
-        
-        # Title text frame
-        title_text_frame = tk.Frame(title_frame, bg=self.colors['bg_primary'])
-        title_text_frame.pack(side='left')
-        
-        # Main title
-        title_label = tk.Label(title_text_frame, text="ROYALE", 
-                              fg=self.colors['text_gold'], bg=self.colors['bg_primary'],
-                              font=self.title_font)
-        title_label.pack()
-        
-        # Subtitle
-        subtitle_label = tk.Label(title_text_frame, text="GUESS WHO", 
-                                 fg=self.colors['text_white'], bg=self.colors['bg_primary'],
-                                 font=self.subtitle_font)
-        subtitle_label.pack()
-        
-        # Crown right
-        crown_right = tk.Label(title_frame, text="♛", fg=self.colors['text_gold'], 
-                              bg=self.colors['bg_primary'], font=("Arial", 24))
-        crown_right.pack(side='left', padx=10)
-        
-        # Description
-        desc_label = tk.Label(container, text="Can you guess the Clash Royale card?",
-                             fg=self.colors['text_light_blue'], bg=self.colors['bg_primary'],
-                             font=self.desc_font)
-        desc_label.pack(pady=10)
-        
-        # Menu card frame
-        menu_frame = tk.Frame(container, bg=self.colors['bg_card'], relief='raised', bd=2)
-        menu_frame.pack(pady=20, padx=50, ipadx=20, ipady=20)
-        
-        # Configure menu frame border
-        menu_frame.configure(highlightbackground=self.colors['border_blue'], 
-                           highlightthickness=2)
-        
-        # Play button (main action)
-        play_btn = tk.Button(menu_frame, text="▶ PLAY", 
-                           bg=self.colors['button_orange'],
-                           fg=self.colors['text_white'],
-                           font=self.button_font,
-                           relief='raised', bd=2,
-                           pady=15, padx=40,
-                           command=self.on_play,
-                           cursor='hand2')
-        play_btn.pack(fill='x', pady=5)
-        
-        # How to Play button
-        help_btn = tk.Button(menu_frame, text="? How to Play",
-                           bg=self.colors['button_cyan'],
-                           fg=self.colors['text_white'],
-                           font=self.button_font,
-                           relief='raised', bd=2,
-                           pady=12, padx=40,
-                           command=self.on_how_to_play,
-                           cursor='hand2')
-        help_btn.pack(fill='x', pady=5)
-        
-        # Leaderboard button
-        leaderboard_btn = tk.Button(menu_frame, text="🏆 Leaderboard",
-                                  bg=self.colors['button_yellow'],
-                                  fg=self.colors['text_white'],
-                                  font=self.button_font,
-                                  relief='raised', bd=2,
-                                  pady=12, padx=40,
-                                  command=self.on_leaderboard,
-                                  cursor='hand2')
-        leaderboard_btn.pack(fill='x', pady=5)
-        
-        # Settings button
-        settings_btn = tk.Button(menu_frame, text="⚙ Settings",
-                               bg=self.colors['button_gray'],
-                               fg=self.colors['text_white'],
-                               font=self.button_font,
-                               relief='raised', bd=2,
-                               pady=12, padx=40,
-                               command=self.on_settings,
-                               cursor='hand2')
-        settings_btn.pack(fill='x', pady=5)
-        
-        # Footer
-        footer_frame = tk.Frame(container, bg=self.colors['bg_primary'])
-        footer_frame.pack(side='bottom', pady=20)
-        
-        footer_text = tk.Label(footer_frame, text="Test your knowledge of Clash Royale cards!",
-                              fg=self.colors['text_light_blue'], bg=self.colors['bg_primary'],
-                              font=self.desc_font)
-        footer_text.pack()
-        
-        footer_subtext = tk.Label(footer_frame, text="Inspired by the classic Guess Who? game",
-                                 fg=self.colors['text_light_blue'], bg=self.colors['bg_primary'],
-                                 font=("Arial", 10))
-        footer_subtext.pack()
-    
-    def center_window(self):
-        """Center the window on the screen"""
+
+        # Center on screen
         self.root.update_idletasks()
-        width = self.root.winfo_width()
-        height = self.root.winfo_height()
-        x = (self.root.winfo_screenwidth() // 2) - (width // 2)
-        y = (self.root.winfo_screenheight() // 2) - (height // 2)
-        self.root.geometry(f'{width}x{height}+{x}+{y}')
-    
-    # Default callback methods (to be overridden)
-    def default_play(self):
-        print("Play button clicked - implement your game start logic here")
-        # You can replace this with your game's start function
-    
-    def default_how_to_play(self):
-        print("How to Play button clicked - implement help dialog here")
-        # You can replace this with your help/instructions function
-    
-    def default_leaderboard(self):
-        print("Leaderboard button clicked - implement leaderboard display here")
-        # You can replace this with your leaderboard function
-    
-    def default_settings(self):
-        print("Settings button clicked - implement settings dialog here")
-        # You can replace this with your settings function
+        sw, sh = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
+        x, y = (sw - 1400) // 2, (sh - 900) // 2
+        self.root.geometry(f"1400x900+{x}+{y}")
+
+        # Fonts
+        self.setup_fonts()
+
+        # Canvas
+        self.canvas = tk.Canvas(root, highlightthickness=0, bg="#0a0e27")
+        self.canvas.pack(fill="both", expand=True)
+
+        self.bg_photo = None
+        self.overlay_color = (0, 0, 0, 140)  # dark overlay for readability
+
+        # Draw
+        self.setup_background()
+        self.create_ui()
+
+        # Resize binding
+        self.canvas.bind("<Configure>", self.on_resize)
+
+    def setup_fonts(self):
+        try:
+            self.title_font = font.Font(family="Arial Black", size=72, weight="bold")
+        except:
+            self.title_font = font.Font(family="Arial", size=72, weight="bold")
+
+        try:
+            self.subtitle_font = font.Font(family="Arial Black", size=36, weight="bold")
+        except:
+            self.subtitle_font = font.Font(family="Arial", size=36, weight="bold")
+
+        self.desc_font = font.Font(family="Arial", size=18, weight="bold")
+        self.button_font = font.Font(family="Arial", size=18, weight="bold")
+        self.small_font = font.Font(family="Arial", size=12)
+
+    def setup_background(self):
+        cw = self.canvas.winfo_width() or 1400
+        ch = self.canvas.winfo_height() or 900
+
+        if os.path.exists(self.bg_image_path):
+            from PIL import ImageDraw
+            img = Image.open(self.bg_image_path).convert("RGBA")
+            img = img.resize((cw, ch), Image.LANCZOS)
+
+            overlay = Image.new("RGBA", img.size, self.overlay_color)
+            img = Image.alpha_composite(img, overlay)
+
+            self.bg_photo = ImageTk.PhotoImage(img)
+            self.canvas.delete("background")
+            self.canvas.create_image(0, 0, anchor="nw", image=self.bg_photo, tags="background")
+        else:
+            self.canvas.create_rectangle(0, 0, cw, ch, fill="#0a0e27", outline="", tags="background")
+
+    def create_ui(self):
+        self.canvas.delete("ui")
+        cw = self.canvas.winfo_width() or 1400
+        ch = self.canvas.winfo_height() or 900
+        cx = cw // 2
+
+        # Title section (top quarter)
+        self.create_title(cx, ch // 5)
+
+        # Buttons (middle lower section)
+        self.create_buttons(cx, ch // 2 + 100)
+
+        # Footer
+        self.create_footer(cx, ch - 60)
+
+    def create_title(self, cx, y):
+        shadow = 6
+
+        # Main title
+        self.canvas.create_text(cx + shadow, y + shadow,
+                                text="ROYALE", font=self.title_font,
+                                fill="#000000", tags="ui")
+        self.canvas.create_text(cx, y, text="ROYALE",
+                                font=self.title_font, fill="#FFD700", tags="ui")
+
+        # Subtitle
+        self.canvas.create_text(cx + shadow // 2, y + 70 + shadow // 2,
+                                text="GUESS WHO", font=self.subtitle_font,
+                                fill="#000000", tags="ui")
+        self.canvas.create_text(cx, y + 70, text="GUESS WHO",
+                                font=self.subtitle_font, fill="#FFFFFF", tags="ui")
+
+        # Tagline
+        self.canvas.create_text(cx, y + 120,
+                                text="Can you guess the Clash Royale card?",
+                                font=self.desc_font, fill="#E0E7FF", tags="ui")
+
+    def create_buttons(self, cx, y_start):
+        spacing = 80
+        button_width, button_height = 400, 60
+
+        self.create_custom_button(cx, y_start, button_width, button_height,
+                                  "▶  PLAY", "#ff4757", "#ffffff",
+                                  self.button_font, self.on_play, "#ff6b7a")
+
+        self.create_custom_button(cx, y_start + spacing, button_width, button_height,
+                                  "❓  HOW TO PLAY", "#2f3542", "#70a1ff",
+                                  self.button_font, self.on_how_to_play, "#5352ed")
+
+        self.create_custom_button(cx, y_start + spacing * 2, button_width, button_height,
+                                  "🏆  LEADERBOARD", "#2f3542", "#ffa502",
+                                  self.button_font, self.on_leaderboard, "#ff9f43")
+
+        self.create_custom_button(cx, y_start + spacing * 3, button_width, button_height,
+                                  "⚙️  SETTINGS", "#2f3542", "#ffffff",
+                                  self.button_font, self.on_settings, "#747d8c")
+
+    def create_custom_button(self, x, y, width, height, text, bg_color, text_color,
+                             font_obj, command, border_color=None):
+        shadow_offset = 5
+        self.canvas.create_rectangle(
+            x - width // 2 + shadow_offset, y - height // 2 + shadow_offset,
+            x + width // 2 + shadow_offset, y + height // 2 + shadow_offset,
+            fill="#000000", outline="", tags="ui"
+        )
+
+        btn_id = self.canvas.create_rectangle(
+            x - width // 2, y - height // 2, x + width // 2, y + height // 2,
+            fill=bg_color, outline=border_color or bg_color, width=3, tags="ui"
+        )
+
+        text_id = self.canvas.create_text(
+            x, y, text=text, font=font_obj, fill=text_color, tags="ui"
+        )
+
+        info = {
+            "bg_id": btn_id,
+            "text_id": text_id,
+            "command": command,
+            "original_bg": bg_color,
+            "hover_bg": self.get_hover_color(bg_color),
+            "border_color": border_color
+        }
+
+        for element in [btn_id, text_id]:
+            self.canvas.tag_bind(element, "<Enter>",
+                                 lambda e, i=info: self.on_button_hover(i))
+            self.canvas.tag_bind(element, "<Leave>",
+                                 lambda e, i=info: self.on_button_leave(i))
+            self.canvas.tag_bind(element, "<Button-1>",
+                                 lambda e, i=info: self.on_button_click(i))
+
+    def get_hover_color(self, color):
+        return {
+            "#ff4757": "#ff6b7a",
+            "#2f3542": "#40495a"
+        }.get(color, color)
+
+    def on_button_hover(self, info):
+        self.canvas.itemconfig(info["bg_id"], fill=info["hover_bg"])
+        if info["border_color"]:
+            self.canvas.itemconfig(info["bg_id"], outline=info["border_color"], width=4)
+        self.root.config(cursor="hand2")
+
+    def on_button_leave(self, info):
+        self.canvas.itemconfig(info["bg_id"], fill=info["original_bg"])
+        if info["border_color"]:
+            self.canvas.itemconfig(info["bg_id"], outline=info["border_color"], width=3)
+        self.root.config(cursor="")
+
+    def on_button_click(self, info):
+        self.canvas.itemconfig(info["bg_id"], fill="#ffffff")
+        self.root.after(100, lambda: self.canvas.itemconfig(info["bg_id"],
+                                                            fill=info["original_bg"]))
+        if info["command"]:
+            self.root.after(150, info["command"])
+
+    def create_footer(self, cx, y):
+        self.canvas.create_text(cx, y,
+                                text="Inspired by the classic Guess Who? game • Test your Clash Royale knowledge!",
+                                font=("Arial", 12, "bold"), fill="#DBEAFE", tags="ui")
+
+    def on_resize(self, event):
+        self.setup_background()
+        self.create_ui()
+
+    # Default callbacks
+    def default_play(self): print("Play clicked")
+    def default_how_to_play(self): print("How to play clicked")
+    def default_leaderboard(self): print("Leaderboard clicked")
+    def default_settings(self): print("Settings clicked")
 
 
 def main():
-    """Example usage of the main menu"""
     root = tk.Tk()
-    
-    # Example callback functions for your game
-    def start_game():
-        print("Starting Clash Royale Guess Who game...")
-        # Add your game start logic here
-        # root.destroy()  # Close menu and start game
-    
-    def show_instructions():
-        # Create a simple instruction dialog
-        instruction_window = tk.Toplevel(root)
-        instruction_window.title("How to Play")
-        instruction_window.geometry("400x300")
-        instruction_window.configure(bg='#1e293b')
-        
-        text = """
-        HOW TO PLAY CLASH ROYALE GUESS WHO
-        
-        1. Choose a Clash Royale card to guess
-        2. Ask yes/no questions about the card
-        3. Try to guess the card in as few questions as possible
-        4. Compare your score with others on the leaderboard
-        
-        Features of cards you can ask about:
-        • Elixir cost
-        • Card type (troop, spell, building)
-        • Rarity (common, rare, epic, legendary)
-        • Arena unlocked
-        • Special abilities
-        """
-        
-        label = tk.Label(instruction_window, text=text, 
-                        fg='white', bg='#1e293b',
-                        font=("Arial", 11), justify='left')
-        label.pack(padx=20, pady=20)
-        
-        close_btn = tk.Button(instruction_window, text="Got it!", 
-                             command=instruction_window.destroy,
-                             bg='#ea580c', fg='white', font=("Arial", 12, "bold"))
-        close_btn.pack(pady=10)
-    
-    def show_leaderboard():
-        print("Showing leaderboard...")
-        # Implement your leaderboard logic here
-    
-    def show_settings():
-        print("Showing settings...")
-        # Implement your settings logic here
-    
-    # Create the main menu with custom callbacks
+
     menu = ClashRoyaleMainMenu(
-        root, 
-        on_play=start_game,
-        on_how_to_play=show_instructions,
-        on_leaderboard=show_leaderboard,
-        on_settings=show_settings
+        root,
+        bg_image_path="extra images/clash royale scene.png",
+        on_play=lambda: messagebox.showinfo("Play", "Start Game!"),
+        on_how_to_play=lambda: messagebox.showinfo("How to Play", "Instructions..."),
+        on_leaderboard=lambda: messagebox.showinfo("Leaderboard", "Coming soon!"),
+        on_settings=lambda: messagebox.showinfo("Settings", "Coming soon!")
     )
-    
+
     root.mainloop()
 
 
