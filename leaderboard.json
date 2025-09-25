@@ -35,6 +35,20 @@
     "best_time": 4.94
   },
   {
+    "name": "mohammed",
+    "score": 928,
+    "games": 1,
+    "win_rate": 100,
+    "best_time": 7.17
+  },
+  {
+    "name": "james",
+    "score": 865,
+    "games": 1,
+    "win_rate": 100,
+    "best_time": 13.47
+  },
+  {
     "name": "ken",
     "score": 846,
     "games": 1,
@@ -49,24 +63,10 @@
     "best_time": 15.87
   },
   {
-    "name": "ben",
-    "score": 816,
+    "name": "bob12",
+    "score": 835,
     "games": 1,
     "win_rate": 100,
-    "best_time": 18.4
-  },
-  {
-    "name": "classy clasher",
-    "score": 801,
-    "games": 1,
-    "win_rate": 100,
-    "best_time": 19.82
-  },
-  {
-    "name": "bob832",
-    "score": 672,
-    "games": 1,
-    "win_rate": 100,
-    "best_time": 32.72
+    "best_time": 16.45
   }
 ]
