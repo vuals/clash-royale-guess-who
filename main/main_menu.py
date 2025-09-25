@@ -269,72 +269,120 @@ class ClashRoyaleMainMenu:
     
     def create_ui(self):
         """Create the main menu UI"""
-        # Configure root
-        self.root.configure(bg='#2c3e50')
+        # Debug information
+        import os
+        print(f"Current directory: {os.getcwd()}")
+        print(f"Files in current directory: {os.listdir('.')}")
+        print(f"Files in parent directory: {os.listdir('..')}")
+        print(f"Looking for: ../clash_royale_background.png")
+        print(f"File exists: {os.path.exists('../clash_royale_background.png')}")
         
-        # Main container
-        main_frame = ttk.Frame(self.root, padding=40)
-        main_frame.pack(fill="both", expand=True)
+        # Try to load background image
+        try:
+            # Load the background image (look in parent directory)
+            bg_image = Image.open("../clash_royale_background.png")
+            print("Successfully loaded background image!")
+            # Resize to fit window
+            bg_image = bg_image.resize((1000, 800), Image.LANCZOS)
+            self.bg_photo = ImageTk.PhotoImage(bg_image)
+            
+            # Create canvas for background
+            canvas = tk.Canvas(self.root, width=1000, height=800, highlightthickness=0)
+            canvas.pack(fill="both", expand=True)
+            canvas.create_image(0, 0, image=self.bg_photo, anchor="nw")
+            
+            # Create frame on top of canvas with transparency effect
+            main_frame = ttk.Frame(canvas, style='Transparent.TFrame')
+            canvas.create_window(500, 400, window=main_frame, anchor="center")
+            
+        except Exception as e:
+            print(f"Could not load background image: {e}")
+            import traceback
+            traceback.print_exc()
+            # Fallback to gradient background
+            self.root.configure(bg='#2c3e50')
+            main_frame = ttk.Frame(self.root, padding=40)
+            main_frame.pack(fill="both", expand=True)
         
-        # Title
-        title_frame = ttk.Frame(main_frame)
+        # Create semi-transparent container for menu items
+        container = ttk.Frame(main_frame, padding=40, relief="raised", borderwidth=2)
+        container.pack()
+        
+        # Configure style for better visibility on background
+        style = ttk.Style()
+        style.configure('Title.TLabel', font=("Orbitron", 36, "bold"), foreground="#FFD700", background="#1a1a1a")
+        style.configure('Subtitle.TLabel', font=("Orbitron", 16), foreground="#00BFFF", background="#1a1a1a")
+        
+        # Title with dark background for visibility
+        title_frame = ttk.Frame(container, style='TFrame')
+        title_frame.configure(relief="solid", borderwidth=0)
         title_frame.pack(pady=(0, 30))
         
-        title_label = ttk.Label(
-            title_frame, 
+        # Add dark semi-transparent background to title area
+        title_bg = tk.Frame(title_frame, bg='#1a1a1a', padx=30, pady=20)
+        title_bg.pack()
+        
+        title_label = tk.Label(
+            title_bg, 
             text="CLASH ROYALE", 
             font=("Orbitron", 36, "bold"),
-            foreground="#e74c3c"
+            foreground="#FFD700",
+            bg='#1a1a1a'
         )
         title_label.pack()
         
-        subtitle_label = ttk.Label(
-            title_frame, 
+        subtitle_label = tk.Label(
+            title_bg, 
             text="Guess Who Edition", 
             font=("Orbitron", 16),
-            foreground="#3498db"
+            foreground="#00BFFF",
+            bg='#1a1a1a'
         )
         subtitle_label.pack()
         
-        # Menu buttons
-        button_frame = ttk.Frame(main_frame)
+        # Menu buttons with better styling
+        button_frame = ttk.Frame(container)
         button_frame.pack(pady=20)
         
         # Play button (larger)
         self.play_btn = ttk.Button(
             button_frame,
-            text="PLAY GAME",
+            text="⚔️ PLAY GAME",
             command=self.start_game,
-            bootstyle="success-outline",
-            width=25
+            bootstyle="success",
+            width=30
         )
         self.play_btn.pack(pady=10)
         
         # Other buttons
         buttons_data = [
-            ("LEADERBOARD", self.show_leaderboard),
-            ("HOW TO PLAY", self.show_instructions),
-            ("SETTINGS", self.show_settings)
+            ("🏆 LEADERBOARD", self.show_leaderboard, "warning"),
+            ("📖 HOW TO PLAY", self.show_instructions, "info"),
+            ("⚙️ SETTINGS", self.show_settings, "primary")
         ]
         
-        for text, command in buttons_data:
+        for text, command, style in buttons_data:
             btn = ttk.Button(
                 button_frame,
                 text=text,
                 command=command,
-                bootstyle="primary-outline",
-                width=25
+                bootstyle=style,
+                width=30
             )
             btn.pack(pady=5)
         
-        # Version info
-        version_label = ttk.Label(
-            main_frame,
+        # Version info with dark background
+        version_frame = tk.Frame(container, bg='#1a1a1a', padx=10, pady=5)
+        version_frame.pack(side="bottom", pady=(20, 0))
+        
+        version_label = tk.Label(
+            version_frame,
             text="v2.1.0 - Enhanced Edition",
             font=("Arial", 8),
-            foreground="#7f8c8d"
+            foreground="#7f8c8d",
+            bg='#1a1a1a'
         )
-        version_label.pack(side="bottom", pady=(20, 0))
+        version_label.pack()
     
     def setup_keybinds(self):
         """Setup global keybinds"""
