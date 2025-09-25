@@ -1,0 +1,13 @@
+{
+  "keybinds": {
+    "new_game": "N",
+    "instructions": "H",
+    "leaderboard": "L",
+    "settings": "S",
+    "submit": "Enter",
+    "close": "Esc"
+  },
+  "sound_enabled": true,
+  "animations_enabled": true,
+  "difficulty": "medium"
+}

@@ -1,22 +1,72 @@
 [
   {
     "name": "On everyones soul but mine it's skeleton",
-    "time": 1.06
+    "score": 990,
+    "games": 1,
+    "win_rate": 100,
+    "best_time": 1.06
   },
   {
     "name": "=",
-    "time": 1.32
+    "score": 987,
+    "games": 1,
+    "win_rate": 100,
+    "best_time": 1.32
   },
   {
     "name": "bob86",
-    "time": 3.82
+    "score": 962,
+    "games": 1,
+    "win_rate": 100,
+    "best_time": 3.82
   },
   {
     "name": "bob 21",
-    "time": 4.3
+    "score": 957,
+    "games": 1,
+    "win_rate": 100,
+    "best_time": 4.3
   },
   {
     "name": "Casey",
-    "time": 4.94
+    "score": 951,
+    "games": 1,
+    "win_rate": 100,
+    "best_time": 4.94
+  },
+  {
+    "name": "crazy clasher",
+    "score": 841,
+    "games": 1,
+    "win_rate": 100,
+    "best_time": 15.87
+  },
+  {
+    "name": "classy clasher",
+    "score": 801,
+    "games": 1,
+    "win_rate": 100,
+    "best_time": 19.82
+  },
+  {
+    "name": "bob832",
+    "score": 672,
+    "games": 1,
+    "win_rate": 100,
+    "best_time": 32.72
+  },
+  {
+    "name": "bob",
+    "score": 606,
+    "games": 1,
+    "win_rate": 100,
+    "best_time": 39.31
+  },
+  {
+    "name": "st3ven",
+    "score": 513,
+    "games": 1,
+    "win_rate": 100,
+    "best_time": 48.68
   }
 ]
