@@ -2,14 +2,15 @@
 """
 clash_royale_game.py
 
-Main entry point for Clash Royale — Guess Who game.
-Supports scrolling card grid, tracking questions/guesses, and persistent leaderboard.
+Clash Royale — Guess Who? (Pro)
+Leaderboard now based on how fast the card is guessed.
 """
 
 import os
 import random
 import re
 import json
+import time
 from dataclasses import dataclass
 from typing import List, Dict, Callable, Any
 import tkinter as tk
@@ -67,13 +68,6 @@ ATTRIBUTES: Dict[str, Callable[[Card], Any]] = {
 LEADERBOARD_FILE = "leaderboard.json"
 MAX_LEADERS = 5
 
-# ---------- HELPER FUNCTIONS ----------
-def slugify(name: str) -> str:
-    s = name.strip().lower()
-    s = re.sub(r"[^\w\s-]", "", s)
-    s = re.sub(r"\s+", "-", s)
-    return s
-
 # ---------- GAME CLASS ----------
 class GuessWhoPro:
     def __init__(self, root: tb.Window):
@@ -85,9 +79,9 @@ class GuessWhoPro:
         self.photo_cache = {}
         self.card_buttons = {}
 
-        # Counters
-        self.question_count = 0
-        self.guess_count = 0
+        # Timing
+        self.start_time = time.time()
+        self.end_time = None
 
         # Leaderboard
         self.leaderboard = self.load_leaderboard()
@@ -167,7 +161,6 @@ class GuessWhoPro:
         if not val: 
             messagebox.showwarning("Empty value", "Enter a value")
             return
-        self.question_count += 1
         attr = self.attr_var.get()
         keyfunc = ATTRIBUTES[attr]
         secret_truth = self.evaluate_comparison(keyfunc(self.secret), self.op_var.get(), val)
@@ -197,32 +190,31 @@ class GuessWhoPro:
             return False
 
     def guess(self, card: Card):
-        self.guess_count += 1
         if card.name == self.secret.name:
-            messagebox.showinfo("Correct!", f"🎉 Correct — {card.name}!")
+            self.end_time = time.time()
+            elapsed = round(self.end_time - self.start_time, 2)
+            messagebox.showinfo("Correct!", f"🎉 Correct — {card.name}!\nTime: {elapsed} seconds")
             self.reveal_secret(card)
-            self.check_leaderboard()
+            self.check_leaderboard(elapsed)
         else:
             messagebox.showwarning("Incorrect", f"{card.name} is not the secret card.")
             self.candidates = [c for c in self.candidates if c.name != card.name]
             self.update_status()
             self.update_visuals([card])
 
+    # ---------- STATUS & VISUALS ----------
     def update_status(self):
-        self.status_var.set(f"Candidates: {len(self.candidates)}   Questions: {self.question_count}   Guesses: {self.guess_count}")
+        self.status_var.set(f"Candidates: {len(self.candidates)}")
 
-    # ---------- VISUALS ----------
     def update_visuals(self, removed):
         for c in removed:
             if c.name in self.card_buttons:
                 frame, lbl_img, btn = self.card_buttons[c.name]
                 btn.state(["disabled"])
-                lbl_img.configure(image=self.load_card_image(c, (120,100)))  # Optional overlay
 
     def reset_visuals(self):
         self.candidates = CARDS.copy()
-        self.question_count = 0
-        self.guess_count = 0
+        self.start_time = time.time()
         for c in CARDS:
             frame, lbl_img, btn = self.card_buttons[c.name]
             btn.state(["!disabled"])
@@ -239,7 +231,6 @@ class GuessWhoPro:
             frame, lbl_img, btn = self.card_buttons[c.name]
             if c.name == card.name:
                 frame.configure(relief="solid")
-        self.update_status()
 
     # ---------- LEADERBOARD ----------
     def load_leaderboard(self):
@@ -252,32 +243,30 @@ class GuessWhoPro:
         with open(LEADERBOARD_FILE, "w") as f:
             json.dump(self.leaderboard, f, indent=2)
 
-    def check_leaderboard(self):
-        score = self.question_count + self.guess_count
-        if len(self.leaderboard)<MAX_LEADERS or score < self.leaderboard[-1]["score"]:
+    def check_leaderboard(self, elapsed_time):
+        if len(self.leaderboard)<MAX_LEADERS or elapsed_time < self.leaderboard[-1]["time"]:
             name = simpledialog.askstring("New High Score!", "You made it to the leaderboard! Enter your name:")
             if not name: name = "Anonymous"
-            self.leaderboard.append({"name": name, "score": score})
-            self.leaderboard.sort(key=lambda x: x["score"])
+            self.leaderboard.append({"name": name, "time": elapsed_time})
+            self.leaderboard.sort(key=lambda x: x["time"])
             self.leaderboard = self.leaderboard[:MAX_LEADERS]
             self.save_leaderboard()
             self.show_leaderboard_ui()
 
     def show_leaderboard_ui(self):
         lb_window = tk.Toplevel(self.root)
-        lb_window.title("Leaderboard — Top 5")
+        lb_window.title("Leaderboard — Fastest Times")
         lb_window.geometry("300x250")
         lb_window.grab_set()
-        ttk.Label(lb_window, text="🏆 Top 5 Players 🏆", font=("Segoe UI", 14, "bold")).pack(pady=8)
+        ttk.Label(lb_window, text="🏆 Top 5 Fastest Players 🏆", font=("Segoe UI", 14, "bold")).pack(pady=8)
         for entry in self.leaderboard:
-            ttk.Label(lb_window, text=f"{entry['name']}: {entry['score']}").pack(anchor="w", padx=12)
+            ttk.Label(lb_window, text=f"{entry['name']}: {entry['time']}s").pack(anchor="w", padx=12)
         ttk.Button(lb_window, text="Close", command=lb_window.destroy).pack(pady=12)
 
     # ---------- NAVIGATION ----------
     def return_to_menu(self):
         if messagebox.askyesno("Return to Menu", "Return to main menu? Current game will be lost."):
-            for widget in self.root.winfo_children():
-                widget.destroy()
+            for widget in self.root.winfo_children(): widget.destroy()
             ClashRoyaleApp(self.root)
 
     def hint(self):
@@ -287,8 +276,7 @@ class GuessWhoPro:
 
     def load_card_image(self, card: Card, size=(120,100)):
         key = (card.name, size)
-        if key in self.photo_cache:
-            return self.photo_cache[key]
+        if key in self.photo_cache: return self.photo_cache[key]
         if card.image_file and os.path.exists(card.image_file):
             im = Image.open(card.image_file).convert("RGBA")
             im.thumbnail(size, Image.LANCZOS)
